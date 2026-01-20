@@ -257,3 +257,15 @@ llmtxt domains
 - 这个方向对吗？
 - 有什么我没考虑到的？
 ```
+
+### 升级协议版本
+
+当 llmtxt 包更新后，升级现有项目：
+
+```bash
+pip install --upgrade llmtxt
+llmtxt upgrade --dry-run  # 预览变更
+llmtxt upgrade            # 执行升级
+```
+
+升级会保留用户自定义配置（项目名、角色、决策记录），同时获取最新协议功能。
