@@ -22,6 +22,10 @@ philosophy:
 
 # 职能角色
 roles:
+  - code: "DESIGN"
+    name: "产品设计"
+    focus: ["需求", "体验", "交互"]
+    triggers: ["设计", "需求", "产品"]
   - code: "ARCH"
     name: "架构师"
     focus: ["系统设计", "模块划分", "技术选型"]
@@ -31,10 +35,14 @@ roles:
     focus: ["实现", "调试", "优化"]
     triggers: ["开发", "实现", "代码"]
   - code: "QA"
-    name: "质量保证"
-    focus: ["测试", "验收", "质量"]
-    triggers: ["测试", "验证", "QA"]
+    name: "产品质量保证"
+    focus: ["验收测试", "用户体验验证"]
+    triggers: ["验收", "体验测试"]
     is_gatekeeper: true
+  - code: "TEST"
+    name: "单元测试"
+    focus: ["代码测试", "覆盖率"]
+    triggers: ["单元测试", "pytest"]
   - code: "PM"
     name: "项目经理"
     focus: ["规划", "优先级", "发布"]
@@ -81,6 +89,19 @@ dialogue_protocol:
       - "docs/CHANGELOG.md"
     git_commit: true
 
+# 需求澄清协议
+requirement_clarification:
+  enabled: true
+  trigger_conditions:
+    - "描述模糊或不完整"
+    - "缺少具体验收标准"
+    - "可能有多种理解方式"
+  clarification_questions:
+    - "你希望达到什么效果？"
+    - "有没有参考案例？"
+    - "这个功能谁会用？在什么场景下用？"
+    - "如何验证这个功能是否完成？"
+
 # Git 工作流
 git_workflow:
   branches:
@@ -89,12 +110,16 @@ git_workflow:
     feature_prefix: "feature/"
     fix_prefix: "fix/"
   commit_prefixes:
+    - prefix: "[DESIGN]"
+      description: "设计变更"
     - prefix: "[ARCH]"
       description: "架构调整"
     - prefix: "[FEAT]"
       description: "新功能"
     - prefix: "[FIX]"
       description: "Bug修复"
+    - prefix: "[CONFIG]"
+      description: "配置调整"
     - prefix: "[DOC]"
       description: "文档更新"
     - prefix: "[TEST]"
@@ -111,6 +136,21 @@ testing:
     enabled: true
     test_case_file: "docs/QA_TEST_CASES.md"
 
+# 快速验收
+quick_acceptance:
+  enabled: true
+  start_command: "npm run dev"
+  reply_formats:
+    pass: "✅"
+    issue: "⚠️ 问题:"
+    skip: "跳过"
+
+# 构建配置
+build:
+  enabled: true
+  command: "npm run build"
+  dist_entry: "dist/index.html"
+
 # 文档管理
 documentation:
   context_file: "docs/CONTEXT.md"
@@ -123,3 +163,6 @@ documentation:
     - path: "docs/CONTEXT.md"
       purpose: "当前上下文"
       update_trigger: "每次对话结束"
+    - path: "docs/QA_TEST_CASES.md"
+      purpose: "测试用例"
+      update_trigger: "功能完成时"
